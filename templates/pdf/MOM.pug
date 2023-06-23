@@ -1,0 +1,242 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title MOM Document
+  style.
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      
+    }
+    section {
+      margin: 0 1.5rem;
+    }
+    .comp-name {
+      margin: auto; 
+      text-align: center;
+      font-weight: 800;
+    }
+    .fat-text {
+      letter-spacing: -3px;
+    }
+    .sm {
+      font-size: 14pt ;
+      font-family: Cambria, serif;
+      margin-right: 1rem
+      
+    }
+    .lg {
+      margin-right: 0;
+      font-family: Cambria, serif;
+      font-size: 19pt;
+    }
+    .ql-align-center {
+      text-align: center;
+    }
+    .link {
+      font-size: 12pt;
+      font-family: Cambria, serif;
+      color: rgb(5, 99, 193);
+      margin-left: 0.4rem;
+    }
+    .bold-text {
+      font-size: 13pt ;
+      font-family: Cambria, serif;
+      font-weight: 600
+    }
+    .normal-text {
+      font-size: 12pt ;
+      font-family: Cambria, serif;
+    }
+    .company-data {
+      font-size: 12pt;
+      font-family: Cambria, serif;
+    }
+    .cin,u {
+      font-weight: 600;
+    }
+    ol{
+      margin-left: 2rem
+    }
+    
+    .table-div{
+      margin: 1rem
+    }
+    table{
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid black;
+      border-spacing: 0;
+    }
+    td{
+      border: 1px solid black;
+      text-align: left;
+      padding: 8px;
+    }
+    .table-data{
+      font-weight: 600;
+    }
+    ul {
+      margin: 0 2.5rem;
+    }
+    ol > li, section:nth-of-type(2) > p, ul > li {
+      line-height: 2rem;
+    }
+    section:nth-of-type(2){
+     margin-top: 1.5rem;
+    }
+   
+body
+  main
+    section 
+    - const moment = require("moment")
+      
+        
+    section 
+      p(style="border-bottom: 2px dashed #000; padding-bottom: 1rem; margin-bottom: 0.2rem; width: 75%;" )
+        strong Minutes of 
+        span(class="current_meet")
+        | / #{moment(data.docs_data[0].agenda_table_data_1[0].instruments[0].meeting_at).subtract(1, 'year').format('YYYY')} - #{moment(data.docs_data[0].agenda_table_data_1[0].instruments[0].meeting_at).format('YYYY')} meeting of the Rating Committee duly convened on #{moment(data.docs_data[0].agenda_table_data_1[0].instruments[0].meeting_at).format('dddd, Do MMMM YYYY')} at #{moment(data.docs_data[0].agenda_table_data_1[0].instruments[0].meeting_at).format('hh:mm a')}  through Video Conference.
+      p(style="border-top: 2px dashed #000; padding-top: 1rem; margin-top: 0.2rem; width: 75%;") 
+        u Rating Committee Members Present:
+      ol  
+        each member_present in data.docs_data[0].agenda_table_data_1[0].rating_committee_members_present
+          li #{member_present.name}
+      br
+      p   
+        u Persons attended the RCM: 
+      ol 
+        each attended_person in data.docs_data[0].agenda_table_data_1[0].persons_attended_rcm
+          li #{attended_person.name}, #{attended_person.position}
+      br
+      p
+        i 
+          u Item No. 1
+      p
+        i 
+          u Chairman
+      p  
+        strong Mr. #{data.docs_data[0].agenda_table_data_1[0].chairman}  
+        | was unanimously appointed as the Chairman of the meeting. The Chairman occupied the chair and declared the commencement of meeting after confirming the presence of the required quorum for the meeting.
+      p
+        i 
+          u Item No. 2
+      p
+        u Leave of Absence
+      p All Committee members were present at the meeting. 
+      p
+        i 
+          u Item No. 3: Agenda No. A 
+      p   
+        u To confirm the minutes of 53rd RCM/ 2022-2023 held on 07th November, 2022.      
+      p The Minutes of the 
+        strong
+          span(class="last_meet") 
+          | RCM/ #{moment(data.docs_data[0].agenda_table_data_1[0].instruments.meeting_at).subtract(1, 'year').format('YYYY')} - #{moment(data.docs_data[0].agenda_table_data_1[0].instruments.meeting_at).format('YYYY')}  held on #{moment(data.docs_data[0].agenda_table_data_1[0].instruments.meeting_at).format('Do MMMM YYYY')}
+        | were circulated to all the members vied email dated 
+        strong 11th November 2022
+        |  for confirmation and the same was confirmed by all the members through email.      
+      each agenda, key  in data.docs_data
+       p
+        i 
+          u Item No. #{4 + key}: Agenda No. B#{key + 1}
+        p To consider the Rating Proposal of 
+          strong #{agenda.entity_name}.
+        h4 . Information relating to Rating Decision: 
+        div(class='table-div')
+          
+        table              
+            tr
+              td(class="") Name of the Rated Entity  
+              td(colspan="2" class="table-data") #{agenda.entity_name}
+            tr
+              td(class="") Nature of Instrument  
+              each i in agenda_data.instruments
+                td(class="table-data") #{i.instrument}
+            tr
+              td(class="") Size (Rs. Crore)  
+                td(class="table-data") #{agenda_data.size}
+            tr
+              td(class="") Fresh Rating/ Surveillance  
+              td(class="table-data" colspan='2') #{agenda_data.rating_process}
+            tr
+              td(class="") Existing Rating
+                td(class="table-data") #{agenda_data.existing_rating}
+            tr
+              td(class="") Proposed Rating
+                td(class="table-data") #{agenda_data.proposed_rating}
+            tr
+              td(class="") Current Rating Assigned
+                td(class="table-data") #{agenda_data.current_rating_assigned[0]}
+            tr
+              td(class="") Name of the Analyst
+              td(class="table-data" colspan="2") #{agenda_data.rating_analyst}
+
+        strong The case was presented by the Rating Analyst and the key salient features mentioned are as below:       
+        br
+        
+        each point in minutes_points
+          | !{point.rating_analyst_points}
+        br
+        strong Post the presentation, the committee discussed the following issues:
+        br
+        each point in minutes_points
+          | !{point.post_presentation_committee_discussed_issue} 
+        br
+        strong Rating Analyst clarified the following points to the committee:
+        br
+        p The company has formed Foreign Exchange Risk Management Policy. As per policy recommended hedge ratio is as follows:
+        br
+        strong  
+          u Exports
+        br
+        p The Unhedged foreign currency exposure as on September 30, 2022 is Rs.11.43 crore (Receivable).
+        strong After the brief discussion on the agenda papers, the Rating Committee assigned the rating as proposed.
+        p
+          u Vote of Thanks
+        p The meeting concluded with a vote of thanks to the chair at 5:30 pm.
+        br
+        strong Dissent (if any) by any RCM member - Nil
+        br
+        br
+        br
+        br
+      div(style="display: flex; justify-content: space-between;")
+        div 
+          strong  Date: #{moment(date).format("DD/MM/YYYY")}
+          br
+          br
+          strong  Place: #{place} 
+        div 
+          strong  #{name} 
+          br
+          br
+          strong  #{position} 
+
+
+
+
+script().
+  let current_meet = document.querySelector(".current_meet")
+  let last_meet = document.querySelector(".last_meet")
+  let meet_id = !{data.docs_data[0].agenda_table_data_1[0].instruments[0].rating_committee_meeting_id}
+  let pr = new Intl.PluralRules("en-US", { type: "ordinal" });
+
+  const suffixes = new Map([
+    ["one", "st"],
+    ["two", "nd"],
+    ["few", "rd"],
+    ["other", "th"],
+  ]);
+  const formatOrdinals = (n) => {
+    const rule = pr.select(n);
+    const suffix = suffixes.get(rule);
+    return `${n}${suffix}`;
+  };
+  current_meet.innerText = formatOrdinals(meet_id)
+  last_meet.innerText = formatOrdinals(meet_id - 1)

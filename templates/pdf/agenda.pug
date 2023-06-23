@@ -1,0 +1,206 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Agenda Document
+  style.
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Arial';
+    }
+    .comp-name{
+      margin: auto; 
+      text-align: center;
+      font-weight: 800;
+    }
+    .fat-text{
+      letter-spacing: -2px;
+    }
+    .sm{
+      font-size: 13pt ;
+      font-family: Cambria, serif;
+      margin-right: 1rem
+      
+    }
+    .lg{
+      margin-right: 0;
+      font-family: Cambria, serif;
+      font-size: 16pt;
+    }
+    .ql-align-center{
+      text-align: center;
+    }
+    .company-data{
+      font-size: 12pt;
+      font-family: Cambria, serif;
+    }
+    .cin{
+      font-weight: 600;
+    }
+    .link{
+      font-size: 12pt;
+      font-family: Cambria, serif;
+      color: rgb(5, 99, 193);
+      margin-left: 0.4rem;
+    }
+    u{
+      font-size: 12pt ;
+      font-family: &quot,Times New Roman&quot;
+      font-weight: 600;
+    }
+    .ql-align-justify{
+      margin: -1rem 1rem 0rem 1rem;
+    }
+    .agenda-details{
+      font-size: 12pt ;
+      font-family: &quot,Times New Roman&quot;
+      width: 80%;
+      display: block;
+      margin: auto;
+      font-weight: 600
+    }
+    h2 {
+      color: red;
+      font-weight: bold;
+      font-size: 24px;
+    }
+    p {
+      color: #111;
+    }
+    .table-div{
+      overflow-x: auto;
+      margin: 1rem
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid black;
+      border-spacing: 0;
+    }
+    thead {
+      color: #111;
+      height: 25px;
+    }
+    .main-table-heading{
+      text-align: center ;
+    }
+    th, td{
+      border: 1px solid black;
+      text-align: left;
+      padding: 8px;
+    }
+    .entity-name{
+      font-weight: 600;
+    }
+    .date{
+      margin: 1rem;
+      font-weight: 600;
+    }
+    
+
+
+
+body 
+
+  p(class="ql-align-center")
+    u AGENDA
+  br
+  br
+  - const moment = require('moment')
+  p(class="ql-align-justify")
+    span(class="agenda-details")
+      |  Agenda for 
+      span(class="current_meet")  
+      |  Rating Committee Meeting (RCM) for the Financial Year #{moment(data.docs_data[0].instruments[0].meeting_at).subtract(1, 'year').format('YYYY')} - #{moment(data.docs_data[0].instruments[0].meeting_at).format('YYYY')} of Infomerics Valuation and Rating Private Limited to be held on #{moment(data.docs_data[0].instruments[0].meeting_at).format('dddd, Do MMMM YYYY')} at #{moment(data.docs_data[0].instruments[0].meeting_at).format('hh:mm a')}  through video conference.
+  br
+
+  div(class='table-div') 
+    table
+      thead  
+        tr
+          th(class="main-table-heading" colspan=6) Agenda
+        tr 
+          th A
+          th(colspan=5 ) 
+            if data.penultimate_meeting_details[0].rating_commmittee_meeting_id 
+              | To confirm the minutes of the 
+              span(class="last_meet")  
+              |  Committee meeting held on #{moment("2023-05-20T11:26:51.000Z").format('Do MMMM YYYY')}.
+            else 
+              | Nil
+        tr 
+          th B
+          th(colspan=5) To consider following proposal for rating: -
+        tr
+          th 
+          th S. No.
+          th Name of the Entity
+          th Instrument / Facility
+          th Size (Rs. crore)
+          th Nature of Assignment
+      tbody(class="tbody")
+        each company, key in data.docs_data
+          tr
+            td 
+            td(class="entity-name") #{key + 1}.
+            td(class="entity-name" ) #{company.entity_name }
+            td(style="padding: 0" class="td")
+              table(style="border: none;") 
+                tbody
+                  each instrument, key in company.instruments
+                    if key === company.instruments.length - 1
+                      tr
+                        td(style="border: 0;") #{instrument.instrument ? instrument.instrument : "-" }
+                    else  
+                      tr
+                        td(style="border: 0;border-bottom: 1px solid black") #{instrument.instrument ? instrument.instrument : "-" }
+            td(style="padding: 0" class="td")
+              table(style="border: none") 
+                tbody
+                  each instrument, key in company.instruments
+                    if key === company.instruments.length - 1
+                      tr
+                        td(style="border: 0;") #{instrument.size_in_crore ? instrument.size_in_crore : "-" }
+                    else  
+                      tr
+                        td(style="border: 0;border-bottom: 1px solid black") #{instrument.size_in_crore ? instrument.size_in_crore : "-" }
+            td(style="padding: 0" class="td")
+              table(style="border: none") 
+                tbody
+                  each instrument, key in company.instruments
+                    if key === company.instruments.length - 1
+                      tr
+                        td(style="border: 0;") #{instrument.nature_of_assignment ? instrument.nature_of_assignment : "-" }
+                    else  
+                      tr
+                        td(style="border: 0;border-bottom: 1px solid black") #{instrument.nature_of_assignment ? instrument.nature_of_assignment : "-" }
+            
+      p(class="ptext") 
+  p(class="date") Date:  #{moment(data.docs_data[0].instruments[0].meeting_at).format('Do MMMM YYYY')}
+
+script().
+  let current_meet = document.querySelector(".current_meet")
+  let last_meet = document.querySelector(".last_meet")
+  let meet_id = !{data.docs_data[0].instruments[0].rating_committee_meeting_id}
+  let pr = new Intl.PluralRules("en-US", { type: "ordinal" });
+  let previous_meeting = !{data.penultimate_meeting_details[0].rating_commmittee_meeting_id}
+
+  console.log(!{data[0]})
+
+  const suffixes = new Map([
+    ["one", "st"],
+    ["two", "nd"],
+    ["few", "rd"],
+    ["other", "th"],
+  ]);
+  const formatOrdinals = (n) => {
+    const rule = pr.select(n);
+    const suffix = suffixes.get(rule);
+    return `${n}${suffix}`;
+  };
+  current_meet.innerText = formatOrdinals(meet_id)
+  last_meet.innerText = formatOrdinals(previous_meeting)
